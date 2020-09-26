@@ -1,7 +1,7 @@
 pkgbase = gog-yooka-laylee
 	pkgdesc = Yooka-Laylee is an all-new open-world platformer from key creative talent behind the Banjo-Kazooie and Donkey Kong Country games!
-	pkgver = 2.1.0.2
-	pkgrel = 1
+	pkgver = 2.x
+	pkgrel = 2
 	url = http://www.playtonicgames.com/games/yooka-laylee/
 	arch = i686
 	arch = x86_64
@@ -11,11 +11,9 @@ pkgbase = gog-yooka-laylee
 	source = gog-yooka-laylee
 	source = gog-yooka-laylee.desktop
 	source = gog-yooka-laylee.profile
-	source = file://gog_yooka_laylee_2.1.0.2.sh
 	sha256sums = 4e4c5428a1d929007fea2204b688a4dcd97a13c992b5f92a0c7866f11adc8adc
 	sha256sums = eab3d609d3146cb69b32e9b9c894164323c3eab45628a33e9d1e6e75cd9ebbca
 	sha256sums = 45d542985620e05d6e60f52e3e9b348870f79b328cc118ff9bd5769e9fed5585
-	sha256sums = 4196857a89078b834a2ae0a64785246951f899cbe1629089ad332fd48fdf794c
 
 pkgname = gog-yooka-laylee
 
