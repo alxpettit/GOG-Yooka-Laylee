@@ -1,14 +1,9 @@
-# Maintainer: Dan Beste <dan.ray.beste@gmail.com>
-
-# Notes:
-#   + gog:// DLAGENT:
-#       - A gog:// DLAGENT can be configured in /etc/makepkg.conf to
-#         automatically pull game files from GOG.
-#       - https://github.com/Sude-/lgogdownloader
+# Maintainer: Alexandria Pettit <alexandria@achu.xyz>
+# Contributer: Dan Beste <dan.ray.beste@gmail.com>
 
 pkgname='gog-yooka-laylee'
-pkgver=2.1.0.2
-pkgrel=1
+pkgver=2.x
+pkgrel=2
 pkgdesc="Yooka-Laylee is an all-new open-world platformer from key creative talent behind the Banjo-Kazooie and Donkey Kong Country games!"
 url="http://www.playtonicgames.com/games/yooka-laylee/"
 license=('custom')
@@ -21,17 +16,43 @@ source=(
   "${pkgname}"
   "${pkgname}.desktop"
   "${pkgname}.profile"
-  "file://${pkgname//-/_}_${pkgver}.sh"
 )
 sha256sums=(
   '4e4c5428a1d929007fea2204b688a4dcd97a13c992b5f92a0c7866f11adc8adc'
   'eab3d609d3146cb69b32e9b9c894164323c3eab45628a33e9d1e6e75cd9ebbca'
   '45d542985620e05d6e60f52e3e9b348870f79b328cc118ff9bd5769e9fed5585'
-  '4196857a89078b834a2ae0a64785246951f899cbe1629089ad332fd48fdf794c'
 )
 
 prepare() {
-  7z x "${pkgname//-/_}_${pkgver}.sh" -tzip -y
+  success=false
+  for file_path in "$(pwd)" "${HOME}/Downloads" "${HOME}/Desktop" "${HOME}"; do
+    # Iterate over common-sense directories looking for yooka laylee installer...
+    echo "Searching in ${file_path}..."
+    target_path=(${file_path}/yooka_laylee_*_*.sh)
+    test -f "${target_path}" && {
+      echo "File found: ${target_path}"
+      7z x "${target_path}" -tzip -y && {
+        success=true
+        break
+      }
+    } || echo "Couldn't find under ${target_path}"
+  done
+  test "$success" = true && {
+    cd "data/noarch/game"
+    for lib_path in "${srcdir}/data/noarch/game/lib"{32,64}; do
+      cd "${lib_path}"
+      # Fix for someone at GOG messing up the symlinks
+      rm libSDL2.so libSDL2-2.0.so.0
+      ln -s libSDL2-2.0.so.0.4.1 libSDL2-2.0.so.0
+      ln -s libSDL2-2.0.so.0.4.1 libSDL2.so
+    done
+
+  } || {
+    echo "Failure!"
+    echo "Please ensure that this file is in one of the directories listed above!"
+    exit 1
+  }
+
 }
 
 package() {
